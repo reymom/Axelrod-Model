@@ -75,8 +75,8 @@ def active_bounds(states,neighs):
     F=len(states[0])
     active=0
     for i in range(N):
-        A=0
         for j in neighs[i]:
+            A=0
             for m in range(F):
                 if (states[i][m] == states[j][m]):
                     A+=1
@@ -92,8 +92,8 @@ def largest_cluster(states,neighs):
         G.add_node(i)
     for i in range(N):
         edges_i=[]
-        A=0
         for j in neighs[i]:
+            A=0
             for m in range(F):
                 if (states[i][m] == states[j][m]):
                     A+=1
@@ -102,7 +102,7 @@ def largest_cluster(states,neighs):
         G.add_edges_from(edges_i)
 
     Gmax = max((G.subgraph(c) for c in nx.connected_components(G)), key=len)
-    smax=nx.number_of_nodes(Gc)
+    smax=nx.number_of_nodes(Gmax)
     return smax
 
 def sizes_clusters(states,neighs):
@@ -113,8 +113,8 @@ def sizes_clusters(states,neighs):
         G.add_node(i)
     for i in range(N):
         edges_i=[]
-        A=0
         for j in neighs[i]:
+            A=0
             for m in range(F):
                 if (states[i][m] == states[j][m]):
                     A+=1
@@ -139,9 +139,9 @@ def simulation_frozen(L,F,q):
     """
 
     states = initializing_states(L,F,q)
-    neighs=extract_neigh_square(L)
-    
+    neighs = extract_neigh_square(L)
     print("inicialmente tenemos %i activos"%active_bounds(states,neighs))
+    #print(" ")
     t=0
     frozen=False
     while not frozen:
@@ -152,8 +152,14 @@ def simulation_frozen(L,F,q):
         if active==0:
             frozen=True
         #print("tenemos %i activos"%active)
+        #print(" ")
+        if t%500 == 0:
+            print("vamos por tiempo t=%i"%t)
+            print("tenemos %i activos"%active)
+            print(" ")
         if t>(10*L**2):
-            print("no convergence up to t=%i"%t)
+            print("no convergence so far up to t=%i"%t)
+            break
     smax = largest_cluster(states,neighs)
     return t,smax
 
@@ -169,14 +175,14 @@ def simulation_sizedistr(L,F,q):
     frozen=False
     while not frozen:
         t+=1
-        print("vamos por tiempo t=%i"%t)
+        #print("vamos por tiempo t=%i"%t)
         states=update(states,neighs)
         active=active_bounds(states,neighs)
         if active==0:
             frozen=True
-        print("tenemos %i activos"%active)
+        #print("tenemos %i activos"%active)
         if t>(10*L**2):
-            print("no convergence up to t=%i"%t)
-
+            print("no convergence so far up to t=%i"%t)
+            break
     sizes = sizes_clusters(states,neighs)
     return sizes
