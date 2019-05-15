@@ -327,8 +327,7 @@ def simulation_sizedistr(N,F,q):
     it runs a simulation until no active bounds remain (absorving state)
     output: all sizes of the final clusters in a unique vector
     """
-    states = initializing_states_uniform(N,F,q)
-    #states = initializing_states_poisson(N,F,q)
+    states = initializing_states_poisson(N,F,q)
 
     #neighs = extract_neigh_chain(N) #para chain
     neighs = extract_neigh_square(N) #square lattice
@@ -358,29 +357,33 @@ def simulation_sizedistr(N,F,q):
     sizes = sizes_clusters(states,neighs)
     return t,sizes
 
-def simulation_activebonds(L,F,q):
+def simulation_activebonds(N,F,q):
     """
     it runs a simulation until no active bounds remain (absorving state)
     output: time dependence of the number of active bounds
     """
-    states = initializing_states(L,F,q)
-    neighs = extract_neigh_square(L)
-    print("inicialmente tenemos %i activos"%active_bounds(states,neighs))
+
+    states = initializing_states_poisson(N,F,q)
+
+    #neighs = extract_neigh_chain(N) #para chain
+    neighs = extract_neigh_square(N) #square lattice
+    #neighs = extract_small_world(N,4,0.05) #small network k=4, p a elegir
+
     t=0
     times=[]
     activebonds=[]
     frozen=False
     while not frozen:
         t+=1
-        #print("vamos por tiempo t=%i"%t)
-        states,number_interaction=update(states,neighs)
-        active=active_bounds(states,neighs)
+        states,number_interaction=update(N,F,states,neighs)
+        active=active_bounds(N,F,states,neighs)
+
         times.append(t)
         activebonds.append(active)
         if active==0:
             frozen=True
-        #print("tenemos %i activos"%active)
-        if t>(10*L**2):
+
+        if t>(50*N):
             print("no convergence so far up to t=%i"%t)
             break
 
