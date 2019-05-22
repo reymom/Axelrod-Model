@@ -7,5 +7,7 @@ Axelrod's model for social influence, cultural traits dissemination
 
 -The most important result is the distribution of the maximum cluster showing the phase transition from a monoculture state to a multicultural one, as we vary the parameter accounting for the initial cultural variability.
 
+
 To fully understand and gain intuition:
+
 C. Castellano, M. Marsili, and A. Vespignani. (2000). Nonequilibrium Phase Transition in a Model for Social Influence. *PHYSICAL REVIEW LETTERS, VOLUME 85, NUMBER 16
